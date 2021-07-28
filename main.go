@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"unicode"
 
 	"github.com/spf13/cobra"
 )
@@ -40,11 +41,11 @@ var pinTable = map[rune]rune{
 }
 
 func pin(r rune) rune {
-	return pinTable[r]
+	return pinTable[unicode.ToLower(r)]
 }
 
 func pinIgnoreChars(r rune) rune {
-	if p, ok := pinTable[r]; ok {
+	if p, ok := pinTable[unicode.ToLower(r)]; ok {
 		return p
 	}
 	return r
@@ -58,6 +59,7 @@ func main() {
 
 pin "hello"             -> "43556"
 pin "hello-world"       -> "4355696753"
+pin "HELLO-WORLD"       -> "4355696753"
 pin -i "hello-world"    -> "43556-96753"`,
 		Args: cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
@@ -78,5 +80,5 @@ pin -i "hello-world"    -> "43556-96753"`,
 
 	pinCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
 	pinCmd.Flags().BoolP("ignore", "i", false, "ignore non convertable characters")
-	pinCmd.Execute()
+	_ = pinCmd.Execute()
 }
