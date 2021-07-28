@@ -1,5 +1,8 @@
 # Pin
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/natebwangsut/pin)](https://goreportcard.com/report/github.com/natebwangsut/pin)
+[![Go Coverage](https://img.shields.io/badge/go%20coverage-here-brightgreen)](https://gocover.io/github.com/natebwangsut/pin)
+
 > Converting string to PIN number.
 
 ## Example
