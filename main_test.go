@@ -11,7 +11,7 @@ func Test_ExecuteCommand(t *testing.T) {
 	b := bytes.NewBufferString("")
 	cmd.SetOutput(b)
 	cmd.SetArgs([]string{"helloworld"})
-	cmd.Execute()
+	_ = cmd.Execute()
 	out, err := ioutil.ReadAll(b)
 	if err != nil {
 		t.Fatal(err)
@@ -27,7 +27,7 @@ func Test_ExecuteCommandVerbose(t *testing.T) {
 	b := bytes.NewBufferString("")
 	cmd.SetOutput(b)
 	cmd.SetArgs([]string{"-v", "helloworld"})
-	cmd.Execute()
+	_ = cmd.Execute()
 	out, err := ioutil.ReadAll(b)
 	if err != nil {
 		t.Fatal(err)
@@ -43,7 +43,7 @@ func Test_ExecuteCommandIgnoreSpecial(t *testing.T) {
 	b := bytes.NewBufferString("")
 	cmd.SetOutput(b)
 	cmd.SetArgs([]string{"-v", "-i", "hello-world"})
-	cmd.Execute()
+	_ = cmd.Execute()
 	out, err := ioutil.ReadAll(b)
 	if err != nil {
 		t.Fatal(err)
