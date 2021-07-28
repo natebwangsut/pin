@@ -6,8 +6,6 @@ import (
 	"testing"
 )
 
-var in string
-
 func Test_ExecuteCommand(t *testing.T) {
 	cmd := NewPinCmd()
 	b := bytes.NewBufferString("")
@@ -18,8 +16,9 @@ func Test_ExecuteCommand(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if string(out) != "4355696753\n" {
-		t.Fatalf("expected \"%s\" got \"%s\"", "4355696753\n", string(out))
+	expectedOutput := "4355696753\n"
+	if string(out) != expectedOutput {
+		t.Fatalf("expected \"%s\" got \"%s\"", expectedOutput, string(out))
 	}
 }
 
