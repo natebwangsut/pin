@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 	"unicode"
 
@@ -44,15 +43,16 @@ func pin(r rune) rune {
 	return pinTable[unicode.ToLower(r)]
 }
 
-func pinIgnoreChars(r rune) rune {
+func pinIgnoreSpecialChars(r rune) rune {
 	if p, ok := pinTable[unicode.ToLower(r)]; ok {
 		return p
 	}
 	return r
 }
 
-func main() {
-	pinCmd := &cobra.Command{
+// NewPinCmd creates pin command
+func NewPinCmd() *cobra.Command {
+	cmd := &cobra.Command{
 		Use:   "pin <string>",
 		Short: "Change the received string to PIN format (e.g. hi -> 44)",
 		Long: `Convert strings to PIN format. For example:
@@ -65,20 +65,23 @@ pin -i "hello-world"    -> "43556-96753"`,
 		Run: func(cmd *cobra.Command, args []string) {
 			source := args[0]
 			if Verbose {
-				fmt.Println("source: ", source)
+				cmd.Println("source:", source)
 			}
 
-			isIgnoreChars, _ := cmd.Flags().GetBool("ignore")
-			if isIgnoreChars {
-				fmt.Println(strings.Map(pinIgnoreChars, source))
+			isIgnoreSpecialChars, _ := cmd.Flags().GetBool("ignore")
+			if isIgnoreSpecialChars {
+				cmd.Println(strings.Map(pinIgnoreSpecialChars, source))
 				return
 			}
 
-			fmt.Println(strings.Map(pin, source))
+			cmd.Println(strings.Map(pin, source))
 		},
 	}
+	cmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
+	cmd.Flags().BoolP("ignore", "i", false, "ignore non convertable characters")
+	return cmd
+}
 
-	pinCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
-	pinCmd.Flags().BoolP("ignore", "i", false, "ignore non convertable characters")
-	_ = pinCmd.Execute()
+func main() {
+	_ = NewPinCmd().Execute()
 }
